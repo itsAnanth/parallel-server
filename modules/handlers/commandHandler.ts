@@ -1,11 +1,9 @@
 import fs from 'fs';
-import { Collection, Client as dClient } from 'discord.js';
+import { Collection } from 'discord.js';
+import Client from '../Client';
 
-interface Client extends dClient {
-    commands: Collection<string, any>;
-}
 
-async function handleCommands(bot: dClient, dir: { absolutePath: string, path: string, name: string }) {
+async function handleCommands(bot: Client, dir: { absolutePath: string, path: string, name: string }) {
     let commands = new Collection();
     
     // @ts-ignore
