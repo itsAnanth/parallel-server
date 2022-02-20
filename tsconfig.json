@@ -5,6 +5,7 @@
         "downlevelIteration": true,
         "target": "ESNext",
         "module": "CommonJS",
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "resolveJsonModule": true
     }
 }
