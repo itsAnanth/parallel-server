@@ -19,7 +19,7 @@ interface CommandPayload {
     cooldown?: number;
     aliases?: string[];
     allow?: allowPayload;
-    required?: number[];
+    required?: bigint[];
     execute: (message: Message, args: string[], bot: Client) => Promise<void>;
 }
 
@@ -30,7 +30,7 @@ interface Command {
     cooldown: number;
     aliases: string[];
     allow: allow;
-    required: number[];
+    required: bigint[];
 
     execute: (message: Message, args: string[], bot: Client) => Promise<void>;
 }
