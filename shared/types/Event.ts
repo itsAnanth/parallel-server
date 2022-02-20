@@ -1,4 +1,5 @@
-import { Client } from "discord.js";
+import Client from "../../modules/Client";
+import { Message } from "./Message";
 
 interface Event {
     name: string;
@@ -7,7 +8,7 @@ interface Event {
 
 type EventPayload = {
     name: string;
-    execute: (bot: Client) => Promise<void>;
+    execute: (bot: Client, message?: Message) => Promise<void>;
 }
 
 export type { Event, EventPayload };
