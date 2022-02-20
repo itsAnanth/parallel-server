@@ -7,8 +7,6 @@ interface Server {
 class Server {
     constructor() {
         this.shards = new Map();
-
-        this.__init__();
     }
 
     async __init__() {
@@ -19,6 +17,8 @@ class Server {
             if (!dyno) continue;
             this.setShard(i, dyno);
         }
+
+        console.log(`Loaded ${this.shards.size} shards`)
     }
 
     start() {
