@@ -20,7 +20,7 @@ interface CommandPayload {
     aliases?: string[];
     allow?: allowPayload;
     required?: bigint[];
-    execute: (message: Message, args: string[], bot: Client) => Promise<void>;
+    execute: (message: Message, args: string[], bot: Client) => Promise<any>;
 }
 
 interface Command {
@@ -32,7 +32,7 @@ interface Command {
     allow: allow;
     required: bigint[];
 
-    execute: (message: Message, args: string[], bot: Client) => Promise<void>;
+    execute: (message: Message, args: string[], bot: Client) => Promise<any>;
 }
 
 export type { Command, allow, CommandPayload, allowPayload }
