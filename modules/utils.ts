@@ -31,7 +31,7 @@ function init() {
         return await this.channel.send({ embeds: [embed], failIfNotExists: false }).catch(console.error);
     };
 
-    async function replyEmbed(user, color, description, footer) {
+    async function replyEmbed({ user, description, color, footer }) {
         const embed = new MessageEmbed()
             .setDescription(description)
             .setColor(color ? color : 'GOLD')
