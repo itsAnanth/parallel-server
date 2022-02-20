@@ -1,4 +1,3 @@
-import fs from 'fs';
 import Server from './modules/Server';
 
 const server = new Server();
