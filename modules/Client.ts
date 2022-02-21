@@ -7,6 +7,8 @@ class Client extends dClient {
     constructor(prefix: string, options: ClientOptions) {
         super(options);
 
+        this.maintenance = false;
+        this.cooldowns = new Collection();
         this.commands = new Collection();
         this.prefix = prefix;
     }
