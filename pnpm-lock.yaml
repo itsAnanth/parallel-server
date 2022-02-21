@@ -3,12 +3,14 @@ lockfileVersion: 5.3
 specifiers:
   '@types/node': '*'
   discord.js: ^13.6.0
+  dotenv: ^16.0.0
   ts-node: ^10.5.0
   typescript: ^4.5.5
 
 dependencies:
   '@types/node': 17.0.18
   discord.js: 13.6.0
+  dotenv: 16.0.0
   ts-node: 10.5.0_f3bd4037939c2ed2942ba074291f8ef2
   typescript: 4.5.5
 
@@ -148,6 +150,11 @@ packages:
       - bufferutil
       - encoding
       - utf-8-validate
+    dev: false
+
+  /dotenv/16.0.0:
+    resolution: {integrity: sha512-qD9WU0MPM4SWLPJy/r2Be+2WgQj8plChsyrCNQzW/0WjvcJQiKQJ9mH3ZgB3fxbUUxgc/11ZJ0Fi5KiimWGz2Q==}
+    engines: {node: '>=12'}
     dev: false
 
   /form-data/3.0.1:
