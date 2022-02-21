@@ -1,4 +1,5 @@
 import { Message, Client } from 'discord.js';
+import type { Message as IMessage } from './Message';
 
 type allowPayload = {
     permissions?: number[];
@@ -20,7 +21,7 @@ interface CommandPayload {
     aliases?: string[];
     allow?: allowPayload;
     required?: bigint[];
-    execute: (message: Message, args: string[], bot: Client) => Promise<any>;
+    execute: (message: IMessage, args: string[], bot: Client) => Promise<any>;
 }
 
 interface Command {
@@ -32,7 +33,7 @@ interface Command {
     allow: allow;
     required: bigint[];
 
-    execute: (message: Message, args: string[], bot: Client) => Promise<any>;
+    execute: (message: IMessage, args: string[], bot: Client) => Promise<any>;
 }
 
 export type { Command, allow, CommandPayload, allowPayload }
