@@ -3,12 +3,12 @@ import { Message } from "./Message";
 
 interface Event {
     name: string;
-    execute: (bot: Client) => Promise<any>;
+    execute: (bot: Client, ...args: any[]) => Promise<any>;
 }
 
 type EventPayload = {
     name: string;
-    execute: (bot: Client, message?: Message) => Promise<any>;
+    execute: (bot: Client, ...args: any[]) => Promise<any>;
 }
 
 export type { Event, EventPayload };
