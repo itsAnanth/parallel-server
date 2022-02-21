@@ -52,8 +52,9 @@ function init() {
         return await this.reply({ embeds: [embed], failIfNotExists: false }).catch(console.error);
     };
 
-    function handleInteraction(i) {
-        if (i.user.id !== this.author.id) {
+    function handleInteraction(i, author?: string) {
+        const user = author ? author : this.author.id;
+        if (i.user.id !== user) {
             i.reply({
                 content: `You can't use the controls of a command issued by another user!\n Current Command issued by: <@${this.author.id}>`, 
                 ephemeral: true
