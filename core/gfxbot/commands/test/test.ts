@@ -1,4 +1,4 @@
-import { CollectorFilter, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
+import { Formatters, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 import { Message } from "../../../../shared/types/Message";
 import Command from "../../../../modules/Command";
 import messageCollector from "../../../../modules/messageCollector";
@@ -11,19 +11,29 @@ export default new Command({
         const self = this;
         const filter = x => x.author.id == message.author.id;
         const data: { info?: string, payment?: string, time?: string } = {};
+        const discordLink = 'https://discord.com/users/';
+        let attachment = null;
 
         const queries = [
-            { text: 'enter design info', field: 'info' },
-            { text: 'enter timeframe', field: 'time' },
-            { text: 'enter payment', field: 'payment' }
+            { text: 'Please provide a brief info about what you\'re looking for (Attachment optional)', field: 'info' },
+            { text: 'Please provide a time frame', field: 'time' },
+            { text: 'Please provide a Budget & payment method', field: 'payment' }
         ];
 
         for (let i = 0; i < queries.length; i++) {
-            const msg = await message.replyEmbed({ description: queries[i].text });
-            const res = await messageCollector(message, filter, 10000);
-            if (!res) return message.replyEmbed({
-                description: 'tooslow'
+            const msg = await message.replyEmbed({ 
+                description: queries[i].text,
+                color: 'AQUA'
             });
+            const res = await messageCollector(message, filter, 120000);
+
+            if (!res) return message.replyEmbed({
+                description: 'Request timed out, please try again',
+                color: 'RED'
+            });
+
+            const attachments = [...res.attachments.values()];
+            if (attachments.length != 0) attachment = attachments[0].url;
             data[queries[i].field] = res.content;
             msg.delete();
         }
@@ -39,12 +49,10 @@ export default new Command({
         const embed = new MessageEmbed()
             .setColor('GREY')
             .setTitle('Commission Request')
-            .setAuthor({ name: message.author.tag, iconURL: message.author.avatarURL({ dynamic: true }) })
-            .setDescription(`${data.info}`)
-            .addField('Time Frame', `${data.time}`)
-            .addField('Payment', `${data.payment}`)
+            .setDescription(`:dollar: **Budget:** ${data.payment}\n\n:date: **Time Frame:** ${data.time}\n\n:bust_in_silhouette: **Client:** ${Formatters.userMention(message.author.id)} (*${Formatters.hyperlink(message.author.tag, `${discordLink}/${message.author.id}`)}*)\n\n`)
+            .addField('\n\u200b\n:page_facing_up: Brief', `${Formatters.codeBlock(data.info)}`)
             
-
+        attachment && (embed.setImage(attachment));
         const msg = await message.channel.send(
             {
                 embeds: [embed],
@@ -52,22 +60,37 @@ export default new Command({
             }
         )
 
-        const collector = msg.createMessageComponentCollector({ componentType: 'BUTTON', time: 10000 });
+        const collector = msg.createMessageComponentCollector({ componentType: 'BUTTON', time: 20000 });
         collector.on('collect', async i => {
             if (message.handleInteraction(i)) return;
             if (i.customId === 'finish') finalize(embed);
-            else if (i.customId === 'discard') message.reply('discarded')
-            else if (i.customId === 'edit') await (self as Command).execute(message, args, bot);
-            msg.delete();
+            else if (i.customId === 'discard') message.replyEmbed({
+                color: 'GREEN',
+                description: 'Successfully discarded request template'
+            });
+            else if (i.customId === 'edit') {
+                await (self as Command).execute(message, args, bot);
+                await msg.delete().catch(console.error);
+            }
+            await msg.delete().catch(console.error);
             collector.stop();
         });
 
-        collector.on('end', (i) => { if (i.size == 0) (msg as Message).disableComponents() });
+        collector.on('end', async (i) => { 
+            if (i.size == 0) (msg as Message).disableComponents() 
+            if (msg.deletable) {
+                await msg.delete().catch(console.error);
+                message.replyEmbed({
+                    color: 'RED',
+                    description: 'Request timed out, please try again'
+                });
+            }
+        });
 
 
         function finalize(embed: MessageEmbed) {
             const btns = [
-                new MessageButton().setStyle('SUCCESS').setLabel('Accept').setCustomId(`f_${BtnTypes.OPEN}_${message.author.id}`)
+                new MessageButton().setStyle('SUCCESS').setLabel('Mark As Ongoing').setCustomId(`f_${BtnTypes.OPEN}_${message.author.id}`)
             ];
 
             embed.setFooter({ text: `Status: ${status[BtnTypes.OPEN]} Open` })
