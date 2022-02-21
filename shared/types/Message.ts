@@ -1,6 +1,6 @@
-import { GuildMember, User, Message as dMessage, MessageEmbed, ButtonInteraction } from 'discord.js';
+import { GuildMember, User, Message as dMessage, MessageEmbed, ButtonInteraction, ColorResolvable } from 'discord.js';
 
-type sendEmbedPayload = { color?: string, description: string, footer?: string, author?: User };
+type sendEmbedPayload = { color?: ColorResolvable, description: string, footer?: string, author?: User, fields?: [string, string, boolean] };
 
 interface Message extends dMessage {
     getUser: (id: string) => Promise<User | null>;
