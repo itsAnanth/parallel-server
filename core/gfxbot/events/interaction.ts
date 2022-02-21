@@ -18,13 +18,18 @@ export default new Event({
         if (args[0] != 'f') return;
         if (i.user.id != args[2]) return (i.message as Message).handleInteraction(i, args[2]);
 
-        let button;
-        if (parseInt(args[1]) == BtnTypes.OPEN) 
-            button = new MessageButton().setStyle('DANGER').setLabel('Close').setCustomId(`f_${BtnTypes.CLOSE}_${args[2]}`)
+        let button, type = parseInt(args[1]);
+        if (type == BtnTypes.OPEN) {
+            button = new MessageButton().setStyle('DANGER').setLabel('Close Request').setCustomId(`f_${BtnTypes.CLOSE}_${args[2]}`);
+            embed.footer = { text: `Status: ${status[BtnTypes.ONGOING]} Ongoing` };
+        } else if (type == BtnTypes.CLOSE) {
+            button = null;
+            embed.footer = { text: `Status: ${status[BtnTypes.CLOSE]} Closed` };
+        }
 
-        embed.footer = { text: `Status: ${status[BtnTypes.ONGOING]} Ongoing` };
 
-        i.update({ embeds: [embed], components: [new MessageActionRow().addComponents(button)] });
+
+        i.update({ embeds: [embed], components: button ? [new MessageActionRow().addComponents(button)] : [] });
         console.log(i.customId);
     }
 })
