@@ -43,7 +43,9 @@ function init() {
     const meta = [sendEmbed, replyEmbed, getUser, getMember, disableComponents];
 
     for (const data of meta) {
-        Object.assign(Message.prototype, data);
+        Message.prototype[data.name] = data;
     }
 
 }
+
+export default init;
