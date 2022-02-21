@@ -1,4 +1,7 @@
 import Server from './modules/Server';
+import { config } from 'dotenv';
+
+config();
 
 const server = new Server();
 
