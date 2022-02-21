@@ -20,8 +20,6 @@ export default async function() {
         path: '../commands',
         name: 'gfxbot'
     });
-
-
-
-    bot.login('NzcwMzY1MjEyNzA0MjQzNzg0.X5cggw.FZfcp-0ovxAqFA9AnaV27wTmMfA')
+    
+    bot.login(process.env.GFXBOT_TOKEN);
 }
