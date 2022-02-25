@@ -20,7 +20,7 @@ class Command {
     }
 
     run(message: IMessage, args: string[], bot: Client) {
-        if (this.dev && this.checkIfDev(message)) return;
+        if (this.dev && !this.checkIfDev(message)) return;
         if (this.required.length != 0 && !this.checkBotPermission(message)) {
             console.log(`At ${this.name}.ts missing permissions, required: ${this.required}`)
             return message.replyEmbed({
