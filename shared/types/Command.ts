@@ -21,6 +21,7 @@ interface CommandPayload {
     aliases?: string[];
     allow?: allowPayload;
     required?: bigint[];
+    dev?: boolean;
     execute: (message: IMessage, args: string[], bot: Client) => Promise<any>;
 }
 
@@ -32,6 +33,7 @@ interface Command {
     aliases: string[];
     allow: allow;
     required: bigint[];
+    dev: boolean;
 
     execute: (message: IMessage, args: string[], bot: Client) => Promise<any>;
 }
