@@ -38,7 +38,7 @@ function init() {
 
     async function sendEmbed({ user, description, color, footer, fields }) {
         const embed = new MessageEmbed()
-            .setDescription(description)
+            .setDescription(String(description))
             .setColor(color ? color : 'GOLD');
 
         if (fields) {
@@ -52,13 +52,14 @@ function init() {
 
     async function replyEmbed({ user, description, color, footer, fields }) {
         const embed = new MessageEmbed()
-            .setDescription(`${description}`)
+            .setDescription(String(description))
             .setColor(color ? color : 'GOLD');
 
         if (fields) {
             for (let i = 0; i < fields.length; i++)
                 embed.addField(fields[i][0], fields[i][1], fields[i][2] ? true : false);
         }
+
         if (footer) embed.setFooter({ text: footer });
         if (user) embed.setAuthor({ name: user.username, iconURL: user.avatarURL() });
         return await this.reply({ embeds: [embed], failIfNotExists: false }).catch(console.error);
