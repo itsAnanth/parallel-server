@@ -57,7 +57,7 @@ export default new Event({
                 // // if (!(await isStaff(command, message))) return;
                 // if (!(evalCommand(command, message) && await isStaff(command, message))) return;
                 // if (!checkPermissions.apply(command, [message])) return;
-                await command.execute(message, args, bot);
+                await command.run(message, args, bot);
                 timestamps.set(message.author.id, now);
             } catch (error) { console.log(error); }
         } else {
