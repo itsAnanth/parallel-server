@@ -9,6 +9,7 @@ interface Message extends dMessage {
     replyEmbed: (payload: sendEmbedPayload) => Promise<Message>;
     createEmbed: (payload: sendEmbedPayload) => MessageEmbed;
     handleInteraction: (interaction: ButtonInteraction, userId?: string) => boolean;
+    sendEmbedDM: (payload: sendEmbedPayload) => Promise<null | Message>
     disableComponents: () => void;
 }
 

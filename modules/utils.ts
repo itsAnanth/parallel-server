@@ -36,6 +36,29 @@ function init() {
         return embed;
     };
 
+    async function sendEmbedDM({ user, description, color, footer, fields }) {
+        let msg = null;
+        const embed = new MessageEmbed()
+            .setDescription(String(description))
+            .setColor(color ? color : 'GOLD');
+
+        if (fields) {
+            for (let i = 0; i < fields.length; i++)
+                embed.addField(fields[i][0], fields[i][1], fields[i][2] ? true : false);
+        }
+        if (footer) embed.setFooter({ text: footer });
+        if (user) embed.setAuthor({ name: user.username, iconURL: user.avatarURL() });
+        try {
+            msg = await (this as Message).author.send({ embeds: [embed] });
+        } catch(e) {
+            console.log('error, handling: ' + e);
+            this.replyEmbed({ description: 'Unable to send DMs, please open your DMs and try again', color: 'RED' });
+            return null;
+        }
+
+        return msg;
+    }
+
     async function sendEmbed({ user, description, color, footer, fields }) {
         const embed = new MessageEmbed()
             .setDescription(String(description))
@@ -76,7 +99,7 @@ function init() {
         }
     }
 
-    const meta = [sendEmbed, replyEmbed, getUser, getMember, disableComponents, createEmbed, handleInteraction];
+    const meta = [sendEmbedDM, sendEmbed, replyEmbed, getUser, getMember, disableComponents, createEmbed, handleInteraction];
 
     for (const data of meta) {
         Message.prototype[data.name] = data;
