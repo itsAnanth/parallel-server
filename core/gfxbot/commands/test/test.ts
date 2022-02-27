@@ -1,4 +1,4 @@
-import { Formatters, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
+import { CollectorFilter, Formatters, MessageActionRow, MessageButton, MessageEmbed, Permissions } from "discord.js";
 import { Message } from "../../../../shared/types/Message";
 import Command from "../../../../modules/Command";
 import messageCollector from "../../../../modules/messageCollector";
@@ -6,10 +6,12 @@ import BtnTypes, { status } from "../../utils/BtnTypes";
 
 export default new Command({
     name: 'test',
+    dev: true,
     cooldown: 5,
+    required: [],
     execute: async function (message, args, bot) {
         const self = this;
-        const filter = x => x.author.id == message.author.id;
+        const filter: CollectorFilter<[Message]> = x => x.author.id == message.author.id;
         const data: { info?: string, payment?: string, time?: string } = {};
         const discordLink = 'https://discord.com/users/';
         let attachment = null;
