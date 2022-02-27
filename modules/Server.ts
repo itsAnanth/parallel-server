@@ -2,16 +2,22 @@ import fs from 'fs';
 
 interface Server {
     shards: Map<string, any>;
+    ignore: string[]
 }
 
 class Server {
-    constructor() {
+    constructor(ignore?: any[]) {
         this.shards = new Map();
+        this.ignore = ignore ? ignore : [];
     }
 
     async __init__() {
         const core = fs.readdirSync('./core');
         for (let i = 0; i < core.length; i++) {
+            if (this.ignore.includes(core[i])) {
+                console.log('App blacklisted, skipping ' + core[i]);
+                continue;
+            }
             let dyno = await import(`../core/${core[i]}/dyno.ts`);
             dyno = dyno.default;
             if (!dyno) continue;
@@ -21,11 +27,11 @@ class Server {
         console.log(`Loaded ${this.shards.size} shards`)
     }
 
-    start() {
+    async start() {
         const shards = [...this.shards.values()];
         for (let i = 0; i < shards.length; i++) {
             const dyno = shards[i];
-            dyno.run();
+            await dyno.run();
         }
     }
 
