@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs, { existsSync } from 'fs';
 import { Collection } from 'discord.js';
 import Client from '../Client';
 
@@ -8,7 +8,13 @@ async function handleCommands(bot: Client, dir: { absolutePath: string, path: st
     
     // @ts-ignore
     bot.commands = commands;
+    
+    if (!existsSync(dir.absolutePath)) return;
+
     const commandFolders = fs.readdirSync(dir.absolutePath);
+
+    if (commandFolders.length == 0) return;
+
     for (const folder of commandFolders) {
         const commandFiles = fs.readdirSync(`${dir.absolutePath}/${folder}`).filter(file => file.endsWith('.ts'));
         for (const file of commandFiles) {
