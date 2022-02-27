@@ -1,4 +1,5 @@
 import type { Event as IEvent, EventPayload } from '../shared/types/Event';
+import type { Client } from '../shared/types/Client';
 
 interface Event extends IEvent { };
 
@@ -7,6 +8,15 @@ class Event {
         this.name = options.name;
 
         this.execute = options.execute;
+    }
+
+    static async ready(bot: Client) {
+
+        console.log(`Logged in as ${bot.user.tag}`);
+
+        bot.user.setPresence({ activities: [{ name: 'Parallel Server', type: 'WATCHING' }], status: 'idle' });
+
+        process.on('unhandledRejection', (e) => console.error(`promise rejection: ${e}`));
     }
 }
 
