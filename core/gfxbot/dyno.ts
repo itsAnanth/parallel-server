@@ -1,5 +1,6 @@
-import _run from './index';
+import Dyno from '../../modules/Dyno';
+import main from './index';
 
-export default {
-    run: _run
-}
+export default new Dyno({
+    run: main
+});
