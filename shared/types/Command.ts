@@ -1,4 +1,5 @@
-import { Message, Client } from 'discord.js';
+import { Message, Client, Interaction, CommandInteraction } from 'discord.js';
+import CommandTypes from '../../modules/Commands/CommandTypes';
 import type { Message as IMessage } from './Message';
 
 type allowPayload = {
@@ -22,7 +23,6 @@ interface CommandPayload {
     allow?: allowPayload;
     required?: bigint[];
     dev?: boolean;
-    execute: (message: IMessage, args: string[], bot: Client) => Promise<any>;
 }
 
 interface Command {
@@ -34,8 +34,25 @@ interface Command {
     allow: allow;
     required: bigint[];
     dev: boolean;
+}
 
+interface MessageCommandPayload extends CommandPayload {
     execute: (message: IMessage, args: string[], bot: Client) => Promise<any>;
 }
 
-export type { Command, allow, CommandPayload, allowPayload }
+interface SlashCommandPayload extends CommandPayload {
+    execute: (interaction: CommandInteraction) => Promise<any>;
+}
+
+
+interface MessageCommand extends Command {
+    type: CommandTypes.MESSAGE;
+    execute: (message: IMessage, args: string[], bot: Client) => Promise<any>;
+}
+
+interface SlashCommand extends Command {
+    type: CommandTypes.SLASH;
+    execute: (interaction: CommandInteraction) => Promise<any>;
+}
+
+export type { Command, allow, CommandPayload, allowPayload, MessageCommand, SlashCommand, MessageCommandPayload, SlashCommandPayload }
