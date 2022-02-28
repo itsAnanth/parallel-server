@@ -23,23 +23,31 @@ export default new Event({
         const args = i.customId.split('_');
         const embed = i.message.embeds[0];
 
-        console.log(args, i.user.id);
-
         if (args[0] != 'f') return;
         if (i.user.id != args[2]) return (i.message as Message).handleInteraction(i, args[2]);
 
-        let button, type = parseInt(args[1]);
+        let buttons, type = parseInt(args[1]);
         if (type == BtnTypes.OPEN) {
-            button = new MessageButton().setStyle('DANGER').setLabel('Close Request').setCustomId(`f_${BtnTypes.CLOSE}_${args[2]}`);
+            buttons = [
+                new MessageButton().setStyle('DANGER').setLabel('Close Request').setCustomId(`f_${BtnTypes.CLOSE}_${args[2]}`),
+                new MessageButton().setStyle('SUCCESS').setLabel('Reopen Request').setCustomId(`f_${BtnTypes.REOPEN}_${args[2]}`),
+            ]
             embed.footer = { text: `Status: ${status[BtnTypes.ONGOING]} Ongoing` };
         } else if (type == BtnTypes.CLOSE) {
-            button = null;
+            buttons = [];
             embed.footer = { text: `Status: ${status[BtnTypes.CLOSE]} Closed` };
+        } else if (type == BtnTypes.REOPEN) {
+            buttons = [
+                new MessageButton().setStyle('SUCCESS').setLabel('Mark As Ongoing').setCustomId(`f_${BtnTypes.OPEN}_${args[2]}`)
+            ];
+            embed.footer = { text: `Status: ${status[BtnTypes.OPEN]} Ongoing` };
         }
 
 
 
-        i.update({ embeds: [embed], components: button ? [new MessageActionRow().addComponents(button)] : [] });
-        console.log(i.customId);
+        const msgpayload = { embeds: [embed] };
+        // @ts-ignore
+        msgpayload.components = buttons.length != 0 ? [new MessageActionRow().addComponents(...buttons)] : [];
+        i.update(msgpayload);
     }
 })

@@ -24,6 +24,10 @@ export default new Command({
             { text: 'Please provide a Budget & payment method', field: 'payment' }
         ];
 
+        await message.replyEmbed({
+            description: ':mailbox_with_mail: you have received a mail'
+        })
+
         for (let i = 0; i < queries.length; i++) {
             const msg = await message.sendEmbedDM({
                 description: queries[i].text,
