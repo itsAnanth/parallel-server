@@ -1,8 +1,8 @@
 import { CollectorFilter, Formatters, MessageActionRow, MessageButton, MessageEmbed, Permissions } from "discord.js";
 import { Message } from "../../../../shared/types/Message";
-import Command from "../../../../modules/Command";
 import messageCollector from "../../../../modules/messageCollector";
 import BtnTypes, { status } from "../../utils/BtnTypes";
+import Command from "../../../../modules/Commands/MessageCommand";
 
 export default new Command({
     name: 'submit',
