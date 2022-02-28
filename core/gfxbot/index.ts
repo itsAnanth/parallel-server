@@ -7,6 +7,14 @@ import handleEvents from '../../modules/handlers/eventHandler';
 const intents = [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.DIRECT_MESSAGES],
     bot = new Client('.', { intents: intents });
 
+declare global {
+    interface bot extends Client {
+        queue: Map<string, number>;
+    }
+}
+
+(bot as bot).queue = new Map()
+
 export default async function() {
     await handleEvents(bot, {
         absolutePath: `./core/gfxbot/events`,

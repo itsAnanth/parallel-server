@@ -11,7 +11,19 @@ export default new Command({
     cooldown: 5,
     guildOnly: false,
     required: [],
-    execute: async function (message, args, bot) {
+    execute: async function (message, args, bot: bot) {
+
+
+        if (bot.queue.has(message.author.id)) {
+            return message.replyEmbed({
+                description: 'You already have a ticket open in DMs, please proceed to the existing one',
+                color: 'RED'
+            })
+        }
+
+        bot.queue.set(message.author.id, 1);
+
+
         const self = this;
         const filter: CollectorFilter<[Message]> = x => x.author.id == message.author.id;
         const data: { info?: string, payment?: string, time?: string } = {};
@@ -42,10 +54,14 @@ export default new Command({
 
             const res = await messageCollector(msg, filter, 120000);
 
-            if (!res) return msg.sendEmbed({
-                description: 'Request timed out, please try again',
-                color: 'RED'
-            });
+            if (!res) {
+                msg.sendEmbed({
+                    description: 'Request timed out, please try again',
+                    color: 'RED'
+                });
+                bot.queue.delete(message.author.id);
+                return;
+            }
 
             const attachments = [...res.attachments.values()];
             if (attachments.length != 0) attachment = attachments[0].url;
@@ -82,19 +98,21 @@ export default new Command({
             return;
         }
 
-        const collector = msg.createMessageComponentCollector({ componentType: 'BUTTON', time: 20000 });
+        const collector = msg.createMessageComponentCollector({ componentType: 'BUTTON', time: 30000 });
         collector.on('collect', async i => {
             if (message.handleInteraction(i)) return;
+            bot.queue.delete(message.author.id);
+            await msg.delete().catch(console.error);
+
             if (i.customId === 'finish') finalize(embed);
-            else if (i.customId === 'discard') message.replyEmbed({
+            else if (i.customId === 'discard') await msg.sendEmbed({
                 color: 'GREEN',
                 description: 'Successfully discarded request template'
             });
             else if (i.customId === 'edit') {
                 await (self as Command).execute(message, args, bot);
-                await msg.delete().catch(console.error);
             }
-            await msg.delete().catch(console.error);
+
             collector.stop();
         });
 
@@ -123,7 +141,11 @@ export default new Command({
             if (!channel) return;
 
             // @ts-ignore
-            await channel.send({ embeds: [embed], components: [new MessageActionRow().addComponents(...btns)] });
+            const req = await channel.send({ embeds: [embed], components: [new MessageActionRow().addComponents(...btns)] });
+
+            await message.sendEmbedDM({
+                description: `Successfully posted request in ${Formatters.hyperlink('Request', req.url)}`
+            })
         }
     }
 })
