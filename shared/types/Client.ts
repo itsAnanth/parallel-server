@@ -1,8 +1,10 @@
 import { Collection, Client as dClient } from "discord.js";
-import Command from "../../modules/Command";
+import MessageCommand from "../../modules/Commands/MessageCommand";
+import SlashCommand from "../../modules/Commands/SlashCommand";
 
 interface Client extends dClient {
-    commands: Collection<string, Command>;
+    messagecommands: Collection<string, MessageCommand>;
+    slashcommands: Collection<string, SlashCommand>;
     prefix: string;
     cooldowns: Collection<string, Collection<string, number>>;
     maintenance: boolean;
