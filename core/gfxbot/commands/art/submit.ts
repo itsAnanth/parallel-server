@@ -7,7 +7,9 @@ import Command from "../../../../modules/Commands/MessageCommand";
 export default new Command({
     name: 'submit',
     aliases: ['request', 'post'],
+    description: 'Post a commission request to krunker gfx lounge',
     cooldown: 5,
+    guildOnly: false,
     required: [],
     execute: async function (message, args, bot) {
         const self = this;
@@ -93,7 +95,6 @@ export default new Command({
             if (msg.deletable)
                 await msg.delete().catch(console.error);
 
-            console.log(reason);
             if (reason == 'time') {
                 msg.sendEmbed({
                     color: 'RED',
@@ -103,14 +104,18 @@ export default new Command({
         });
 
 
-        function finalize(embed: MessageEmbed) {
+        async function finalize(embed: MessageEmbed) {
             const btns = [
                 new MessageButton().setStyle('SUCCESS').setLabel('Mark As Ongoing').setCustomId(`f_${BtnTypes.OPEN}_${message.author.id}`)
             ];
 
-            embed.setFooter({ text: `Status: ${status[BtnTypes.OPEN]} Open` })
+            embed.setFooter({ text: `Status: ${status[BtnTypes.OPEN]} Open` });
 
-            message.channel.send({ embeds: [embed], components: [new MessageActionRow().addComponents(...btns)] });
+            const channel = message.guild.channels.cache.find(x => x.name.toLowerCase() == 'design-request');
+            if (!channel) return;
+
+            // @ts-ignore
+            await channel.send({ embeds: [embed], components: [new MessageActionRow().addComponents(...btns)] });
         }
     }
 })
