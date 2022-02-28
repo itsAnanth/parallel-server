@@ -1,4 +1,4 @@
-import { Client, Formatters, Interaction, Permissions } from 'discord.js';
+import { Client, CommandInteraction, Formatters, Interaction, Permissions } from 'discord.js';
 import type { allowPayload, Command as ICommand, CommandPayload } from '../../shared/types/Command';
 import type { Message as IMessage } from '../../shared/types/Message';
 import devs from '../../shared/data/devs.json';
@@ -18,11 +18,11 @@ class Command {
         this.configUserPermissions(options.allow);
     }
 
-    checkIfDev(message: IMessage | Interaction) {
+    checkIfDev(message: IMessage | CommandInteraction) {
         return devs.includes(message instanceof Interaction ? message.member.user.id : message.author.id);
     }
 
-    checkBotPermission(message: IMessage | Interaction) {
+    checkBotPermission(message: IMessage | CommandInteraction) {
         for (let i = 0; i < this.required.length; i++) {
             if (!message.guild.me.permissions.has(this.required[i]))
                 return false;
