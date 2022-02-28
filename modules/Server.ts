@@ -1,12 +1,13 @@
 import fs from 'fs';
+import Dyno from './Dyno';
 
 interface Server {
-    shards: Map<string, any>;
+    shards: Map<string, Dyno>;
     ignore: string[]
 }
 
 class Server {
-    constructor(ignore?: any[]) {
+    constructor(ignore?: string[]) {
         this.shards = new Map();
         this.ignore = ignore ? ignore : [];
     }
@@ -21,7 +22,7 @@ class Server {
             let dyno = await import(`../core/${core[i]}/dyno.ts`);
             dyno = dyno.default;
             if (!dyno) continue;
-            this.setShard(i, dyno);
+            this.setShard(i, (dyno as Dyno));
         }
 
         console.log(`Loaded ${this.shards.size} shards`)
@@ -35,7 +36,7 @@ class Server {
         }
     }
 
-    setShard(id: number|string, shard: any) {
+    setShard(id: number|string, shard: Dyno) {
         this.shards.set(this.to_string(id), shard);
     }
 
