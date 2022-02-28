@@ -2,17 +2,18 @@ import Event from "../../../modules/Event"
 import { Collection, MessageEmbed } from 'discord.js';
 import devs from '../data/devs.json';
 import Command from "../../../modules/Commands/MessageCommand";
+import { Message } from "../../../shared/types/Message";
 
 export default new Event({
     name: 'messageCreate',
-    execute: async (bot, message) => {
+    execute: async (bot, message: Message) => {
         const cooldowns = bot.cooldowns;
         /** Ignores:
         * - Bots
         * - Messages that don't start with bot prefix
         * - Banned users */
 
-        if (!message.content.toLowerCase().startsWith(bot.prefix) || !message.guild) return;
+        if (!message.content.toLowerCase().startsWith(bot.prefix) || message.author.bot) return;
         // Maintenance mode
         if (devs.includes(message.author.id) && message.content.startsWith(`${bot.prefix}maintenance`) && message.content.split.length == 2) {
             bot.maintenance = message.content.split(' ')[1] == 'on' ? true : false;
@@ -25,6 +26,8 @@ export default new Event({
             commandName = args.shift().toLowerCase(),
             command: Command = bot.messagecommands.get(commandName) || bot.messagecommands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
         if (!command) return;
+
+        if (command.guildOnly && !message.guild) return;
 
         if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Collection());
 

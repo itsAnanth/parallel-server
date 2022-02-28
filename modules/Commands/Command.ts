@@ -13,6 +13,7 @@ class Command {
         this.cooldown = options.cooldown ? options.cooldown : 0;
         this.expectedArgs = options.expectedArgs ? options.expectedArgs : 'not provided';
         this.dev = options.dev ? options.dev : false;
+        this.guildOnly = options.guildOnly ? options.guildOnly : true;
 
         this.configBotPermissions(options.required);
         this.configUserPermissions(options.allow);

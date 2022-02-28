@@ -8,8 +8,8 @@ export default new Event({
     name: 'interactionCreate',
     execute: async (bot, i: Interaction) => {
         if (i.isCommand()) {
-            console.log('is command');
             const command: SlashCommand = bot.slashcommands.get(i.commandName);
+            if (command.guildOnly && !i.guild) return;
             if (!command) return i.reply({
                 content: 'Unknown command',
                 ephemeral: true

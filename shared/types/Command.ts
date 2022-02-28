@@ -23,6 +23,7 @@ interface CommandPayload {
     allow?: allowPayload;
     required?: bigint[];
     dev?: boolean;
+    guildOnly?: boolean;
 }
 
 interface Command {
@@ -34,6 +35,7 @@ interface Command {
     allow: allow;
     required: bigint[];
     dev: boolean;
+    guildOnly: boolean;
 }
 
 interface MessageCommandPayload extends CommandPayload {
