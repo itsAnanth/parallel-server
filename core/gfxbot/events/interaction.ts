@@ -1,13 +1,23 @@
 import { Interaction, MessageButton, MessageActionRow } from "discord.js"
-import Command from "../../../modules/Command"
-import type { Event as IEvent } from "../../../shared/types/Event";
 import Event from '../../../modules/Event';
 import BtnTypes, { status } from "../utils/BtnTypes";
 import { Message } from "../../../shared/types/Message";
+import SlashCommand from "../../../modules/Commands/SlashCommand";
 
 export default new Event({
     name: 'interactionCreate',
     execute: async (bot, i: Interaction) => {
+        if (i.isCommand()) {
+            console.log('is command');
+            const command: SlashCommand = bot.slashcommands.get(i.commandName);
+            if (!command) return i.reply({
+                content: 'Unknown command',
+                ephemeral: true
+            })
+
+            command.run(i);
+        }
+
         if (!i.isButton()) return;
 
         const args = i.customId.split('_');
