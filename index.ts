@@ -5,10 +5,10 @@ import init from './modules/utils';
 init();
 config();
 
-const server = new Server();
+const server = new Server(['krunker_asia']);
 
 (async function () {
     await server.__init__();
 
-    server.start();
+    await server.start();
 })();
