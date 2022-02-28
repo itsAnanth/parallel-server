@@ -24,9 +24,7 @@ export default new Command({
             { text: 'Please provide a Budget & payment method', field: 'payment' }
         ];
 
-        await message.replyEmbed({
-            description: ':mailbox_with_mail: you have received a mail'
-        })
+
 
         for (let i = 0; i < queries.length; i++) {
             const msg = await message.sendEmbedDM({
@@ -35,6 +33,12 @@ export default new Command({
             });
 
             if (!msg) return;
+
+            if (i == 0) {
+                await message.replyEmbed({
+                    description: ':mailbox_with_mail: you have received a mail'
+                })
+            }
 
             const res = await messageCollector(msg, filter, 120000);
 
