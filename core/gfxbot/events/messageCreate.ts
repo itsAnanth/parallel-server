@@ -1,7 +1,7 @@
 import Event from "../../../modules/Event"
 import { Collection, MessageEmbed } from 'discord.js';
 import devs from '../data/devs.json';
-import Command from "../../../modules/Command";
+import Command from "../../../modules/Commands/MessageCommand";
 
 export default new Event({
     name: 'messageCreate',
@@ -23,7 +23,7 @@ export default new Event({
 
         const args = message.content.substring(bot.prefix.length).trim().split(' '),
             commandName = args.shift().toLowerCase(),
-            command: Command = bot.commands.get(commandName) || bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+            command: Command = bot.messagecommands.get(commandName) || bot.messagecommands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
         if (!command) return;
 
         if (!cooldowns.has(command.name)) cooldowns.set(command.name, new Collection());
