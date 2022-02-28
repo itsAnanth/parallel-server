@@ -14,11 +14,13 @@ export default async function() {
         name: 'gfxbot'
     });
 
-    await handleCommands(bot, { 
-        absolutePath: `./core/gfxbot/commands`, 
-        path: '../commands',
-        name: 'gfxbot'
-    });
+    bot.once('ready', async() => {
+        await handleCommands(bot, { 
+            absolutePath: `./core/gfxbot/commands`, 
+            path: '../commands',
+            name: 'gfxbot'
+        });
+    })
     
     bot.login(process.env.GFXBOT_TOKEN);
 }
