@@ -9,7 +9,8 @@ class Client extends dClient {
 
         this.maintenance = false;
         this.cooldowns = new Collection();
-        this.commands = new Collection();
+        this.messagecommands = new Collection();
+        this.slashcommands = new Collection();
         this.prefix = prefix;
     }
 }
