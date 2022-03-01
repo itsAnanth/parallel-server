@@ -122,6 +122,7 @@ export default new Command({
                 await msg.delete().catch(console.error);
 
             if (reason == 'time') {
+                bot.queue.delete(message.author.id);
                 msg.sendEmbed({
                     color: 'RED',
                     description: 'Request timed out, please try again'
