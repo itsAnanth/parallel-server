@@ -7,6 +7,13 @@ import { Message } from "../../../shared/types/Message";
 export default new Event({
     name: 'messageCreate',
     execute: async (bot, message: Message) => {
+
+        const reactionChannels = ['947982111103680562', '675168789410611210'];
+        if (reactionChannels.includes(message.channel.id)) {
+            await message.react(':star:');
+            return;
+        }
+
         const cooldowns = bot.cooldowns;
         /** Ignores:
         * - Bots
