@@ -10,7 +10,7 @@ export default new Event({
 
         const reactionChannels = ['947982111103680562', '675168789410611210'];
         if (reactionChannels.includes(message.channel.id)) {
-            await message.react(message.guild.emojis.cache.find(x => x.name == 'star'));
+            await message.react('⭐');
             return;
         }
 
