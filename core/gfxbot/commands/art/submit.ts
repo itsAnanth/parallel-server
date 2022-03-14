@@ -44,7 +44,10 @@ export default new Command({
                 color: 'AQUA'
             });
 
-            if (!msg) return;
+            if (!msg) {
+                bot.queue.delete(message.author.id);
+                return;
+            }
 
             if (i == 0) {
                 await message.replyEmbed({
